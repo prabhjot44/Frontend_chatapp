@@ -3,32 +3,25 @@ import io from "socket.io-client";
 import { useState } from "react";
 import Chat from "./Chat";
 
+const socket = io.connect(process.env.REACT_APP_SOCKET_SERVER_URL);
+
 function App() {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
-  const socketServerUrl = process.env.REACT_APP_SOCKET_SERVER_URL;
-
-  console.log(process.env.REACT_APP_SOCKET_SERVER_URL,'socket56')
 
   const joinRoom = () => {
-
     if (username !== "" && room !== "") {
-      socketServerUrl.emit("join_room", {
+      socket.emit("join_room", {
         userName:username,
         roomName: room
       });
       setShowChat(true);
-
-      socketServerUrl.on('user_joined', (data) => {
+      socket.on('user_joined', (data) => {
         console.log(data,"data");
-
         alert(data)
-
       });
-
     }
-
   };
 
   return (
@@ -57,7 +50,7 @@ function App() {
 
         </div>
       ) : (
-        <Chat socket={socketServerUrl} username={username} room={room} />
+        <Chat socket={socket} username={username} room={room} />
       )}
     </div>
   );
