@@ -1,33 +1,44 @@
 import "./App.css";
-import io from "socket.io-client";
-import { useState } from "react";
+import { io } from "socket.io-client";
+import { useState, useEffect } from "react";
 import Chat from "./Chat";
 
-const socket = io.connect("http://localhost:3001");
+// ✅ ENV URL
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+// ✅ FIXED socket connection
+const socket = io(API_BASE_URL, {
+  transports: ["websocket"], // important for Render
+  withCredentials: true,
+});
 
 function App() {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
 
-  const joinRoom = () => {
+  // ✅ FIX: listen once (not inside joinRoom)
+  useEffect(() => {
+    socket.on("user_joined", (data) => {
+      console.log(data, "data");
+      alert(data);
+    });
 
+    // cleanup (important)
+    return () => {
+      socket.off("user_joined");
+    };
+  }, []);
+
+  const joinRoom = () => {
     if (username !== "" && room !== "") {
       socket.emit("join_room", {
-        userName:username,
-        roomName: room
+        userName: username,
+        roomName: room,
       });
+
       setShowChat(true);
-
-      socket.on('user_joined', (data) => {
-        console.log(data,"data");
-
-        alert(data)
-
-      });
-
     }
-
   };
 
   return (
@@ -44,6 +55,7 @@ function App() {
               setUsername(event.target.value);
             }}
           />
+
           <input
             type="text"
             placeholder="Room ID..."
@@ -52,8 +64,8 @@ function App() {
               setRoom(event.target.value);
             }}
           />
-          <button onClick={joinRoom}>Join A Room</button>
 
+          <button onClick={joinRoom}>Join A Room</button>
         </div>
       ) : (
         <Chat socket={socket} username={username} room={room} />
