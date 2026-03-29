@@ -69,7 +69,6 @@ function App() {
         </div>
       ) : (
         <>
-         <h1>Welcome to Prabhjot Chat App</h1>
         <Chat socket={socket} username={username} room={room} />
         </>
       )}
