@@ -68,7 +68,10 @@ function App() {
           <button onClick={joinRoom}>Join A Room</button>
         </div>
       ) : (
+        <>
+         <h1>Welcome to Prabhjot Chat App</h1>
         <Chat socket={socket} username={username} room={room} />
+        </>
       )}
     </div>
   );
