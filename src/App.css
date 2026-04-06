@@ -148,7 +148,32 @@ body {
 
 .chat-window .chat-body .message .message-meta {
   display: flex;
+  align-items: center;
   font-size: 12px;
+}
+
+/* Message status indicators */
+.msg-status {
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: -1px;
+}
+
+.msg-status.sending {
+  color: #999;
+}
+
+.msg-status.sent {
+  color: #999;
+}
+
+.msg-status.delivered {
+  color: #999;
+}
+
+.msg-status.seen {
+  color: #4fc3f7;
 }
 
 .chat-window .chat-footer {
