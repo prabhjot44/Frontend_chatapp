@@ -2,6 +2,7 @@ import "./App.css";
 import { io } from "socket.io-client";
 import { useState, useEffect } from "react";
 import Chat from "./Chat";
+import Header from "./components/layout/Header";
 
 // ✅ ENV URL
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -41,39 +42,35 @@ function App() {
     }
   };
 
-  return (
-    <div className="App">
+return (
+  <div className="app-container">
+    <Header />
+
+    <main className="main-content">
       {!showChat ? (
-        <div className="joinChatContainer">
-          <h3>Join A Chat</h3>
+        <div className="join-card">
+          <h2>Join Chat Room</h2>
 
           <input
             type="text"
-            placeholder="John..."
-            name="username"
-            onChange={(event) => {
-              setUsername(event.target.value);
-            }}
+            placeholder="Enter username"
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <input
             type="text"
-            placeholder="Room ID..."
-            name="room"
-            onChange={(event) => {
-              setRoom(event.target.value);
-            }}
+            placeholder="Enter room ID"
+            onChange={(e) => setRoom(e.target.value)}
           />
 
-          <button onClick={joinRoom}>Join A Room</button>
+          <button onClick={joinRoom}>Join Chat</button>
         </div>
       ) : (
-        <>
         <Chat socket={socket} username={username} room={room} />
-        </>
       )}
-    </div>
-  );
+    </main>
+  </div>
+);
 }
 
 export default App;
